@@ -1,23 +1,19 @@
 #!/bin/bash
-
-#SBATCH --job-name=dmrg_calc 
+#SBATCH -J dmrg
 #SBATCH --account=commons
-#SBATCH --partition=scavenge     
-#SBATCH --output=dmrg_%j.out      
-#SBATCH --error=dmrg_%j.err       
-#SBATCH --time=1:00:00           
-#SBATCH --nodes=1                
-#SBATCH --ntasks=1                
-#SBATCH --cpus-per-task=32        
-#SBATCH --mem=32G                                 
-#SBATCH --export=ALL              
+#SBATCH --partition=commons
+#SBATCH -e slurm-%x-%j.err
+#SBATCH -o slurm-%x-%j.out
+#SBATCH -t 24:00:00
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 128
+#SBATCH --mem 0
+
+module purge
+ml GCC GCCcore Python pybind11 CMake imkl OpenMPI
+pip install pyscf matplotlib
+export PYTHONPATH=/scratch/mm207/block2/build:/scratch/mm207/block2:${PYTHONPATH}
+python3 -u $1
 
 
-SCRATCH_DIR="/home/mm207/DMRG/${SLURM_JOB_ID}"
-mkdir -p "$SCRATCH_DIR"
-
-
-export SLURM_JOB_ID=${SLURM_JOB_ID}  
-
-
-python3 script.py  
