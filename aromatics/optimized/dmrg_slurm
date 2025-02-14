@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH --job-name=dmrg_calc 
+#SBATCH --account=commons
+#SBATCH --partition=scavenge     
+#SBATCH --output=dmrg_%j.out      
+#SBATCH --error=dmrg_%j.err       
+#SBATCH --time=1:00:00           
+#SBATCH --nodes=1                
+#SBATCH --ntasks=1                
+#SBATCH --cpus-per-task=32        
+#SBATCH --mem=32G                                 
+#SBATCH --export=ALL              
+
+
+SCRATCH_DIR="/home/mm207/DMRG/${SLURM_JOB_ID}"
+mkdir -p "$SCRATCH_DIR"
+
+
+export SLURM_JOB_ID=${SLURM_JOB_ID}  
+
+
+python3 script.py  
